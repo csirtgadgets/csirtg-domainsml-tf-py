@@ -31,7 +31,7 @@ data_files = [
 ]
 
 setup(
-    name="csirtg_urlsml_tf",
+    name="csirtg_domainsml_tf",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="CSIRTG DOMAINs ML Framework - TensorFlow",
