@@ -1,0 +1,3 @@
+include versioneer.py
+include csirtg_domainsml_tf/_version.py
+include data
