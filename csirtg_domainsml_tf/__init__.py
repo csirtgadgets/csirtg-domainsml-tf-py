@@ -30,7 +30,7 @@ def normalize_domains(indicators):
     if not isinstance(indicators, list):
         indicators = [indicators]
 
-    return [urlparse(i.lower()).geturl() for i in indicators]
+    return [i.lower() for i in indicators]
 
 
 def predict(i):
@@ -43,8 +43,7 @@ def predict(i):
     txt = json.loads(txt)
     tokenizer.word_index = txt
 
-    if not isinstance(i, list):
-        i = [i]
+    i = normalize_domains(i)
 
     seq = tokenizer.texts_to_sequences(i)
     log_entry_processed = sequence.pad_sequences(seq, maxlen=MAX_STRING_LEN)

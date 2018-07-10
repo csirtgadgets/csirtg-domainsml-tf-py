@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from csirtg_domainsml_tf import predict
+from csirtg_domainsml_tf import predict, normalize_domains
 from faker import Faker
 fake = Faker()
 from pprint import pprint
@@ -7,6 +7,7 @@ import os
 import numpy as np
 
 DOMAINS = [
+    'GOOGLE.com',
     'google.com',
     'g00gle.com',
     'aws.amazon.com',
@@ -41,3 +42,8 @@ def test_random():
     assert predictions[0]
 
     assert np.average(predictions) > 0.7
+
+
+def test_normalize_domains():
+    assert len(normalize_domains(DOMAINS)) > 0
+    assert normalize_domains(DOMAINS)[0] == 'google.com'
