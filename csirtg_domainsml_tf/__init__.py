@@ -7,6 +7,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 import json
+import sys, gc
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -15,7 +16,8 @@ except ImportError:
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import textwrap
 
-from keras.models import Sequential, load_model
+from keras import backend as K
+from keras.models import load_model
 from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
 
@@ -47,10 +49,12 @@ def predict(i):
     seq = tokenizer.texts_to_sequences(i)
     log_entry_processed = sequence.pad_sequences(seq, maxlen=MAX_STRING_LEN)
 
-    model = load_model(MODEL)
-    model.load_weights(WEIGHTS)
-
-    return model.predict(log_entry_processed)
+    MYMODEL = load_model(MODEL)
+    MYMODEL.load_weights(WEIGHTS)
+    p = MYMODEL.predict(log_entry_processed)
+    K.clear_session()
+    gc.collect()
+    return p
 
 
 def main():
@@ -71,7 +75,11 @@ def main():
 
     args = p.parse_args()
 
-    indicators = args.indicators.split(',')
+    if not sys.stdin.isatty():
+        indicators = sys.stdin.read().split("\n")
+        indicators = indicators[:-1]
+    else:
+        indicators = args.indicators.split(',')
 
     predictions = predict(indicators)
 
