@@ -41,7 +41,7 @@ def test_random():
 
     assert predictions[0]
 
-    assert np.average(predictions) > 0.7
+    assert np.average(predictions) > 0.6
 
 
 def test_normalize_domains():
